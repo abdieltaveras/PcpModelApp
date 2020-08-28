@@ -20,7 +20,7 @@ namespace BLLPcpModelApp.Tests
             var id = -1;
             try
             {
-                id = BLLPcpModelApp.InsUpdPersona(persona);
+                id = BLLPcpModel_App.InsUpdPersona(persona);
             }
             catch (Exception e)
             {
@@ -35,11 +35,11 @@ namespace BLLPcpModelApp.Tests
         public void GerPersonasTest()
         {
             var mensajeError = string.Empty;
-            var searchParam = new PersonaGetParams() {Nombre="Pedro" };
+            var searchParam = new PersonaGetParams() {Nombres="Pedro" };
             IEnumerable<Persona> result = null;
             try
             {
-                result = BLLPcpModelApp.GetPersonas(searchParam);
+                result = BLLPcpModel_App.GetPersonas(searchParam);
             }
             catch (Exception e)
             {

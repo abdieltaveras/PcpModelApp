@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BLLPcpModelApp.Models.Persona>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear Nuevo", "CreateOrEdit")
 </p>
 <table class="table">
     <tr>
@@ -53,9 +53,9 @@
             @Html.DisplayFor(modelItem => item.Edad)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "CreateOrEdit", new {  id=item.IdPersona }) 
+            @*@Html.ActionLink("Details", null, null ) |
+            @Html.ActionLink("Delete", null, null)*@
         </td>
     </tr>
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BLLPcpModelApp
 {
-    public partial class BLLPcpModelApp
+    public static partial  class BLLPcpModel_App
     {
         public static int InsUpdPersona(Persona insUpdParam)
         {

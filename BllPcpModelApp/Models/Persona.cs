@@ -20,6 +20,10 @@ namespace BLLPcpModelApp.Models
 
         public string CampoNuevo { get; set; } = string.Empty;
 
+        public override string ToString()
+        {
+            return $"{Nombres} {Apellido1} {Apellido2} codigo {Codigo}";
+        }
         public DateTime FechaNacimiento { get; set; } = Constants.DateDefaultValue;
         [IgnorarEnParam]
         public int Edad => BLLUtils.CalcEdad(this.FechaNacimiento);
@@ -34,7 +38,7 @@ namespace BLLPcpModelApp.Models
 
         //public string HastaCodigo { get; set; } = string.Empty;
 
-        public string Nombre { get; set; } = string.Empty;
+        public string Nombres { get; set; } = string.Empty;
 
         //public string Apellido1 { get; set; } = string.Empty;
 

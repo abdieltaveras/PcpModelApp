@@ -1,17 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[SpInsUpdPersona]
 (
-	@IdPersona int=-1,
+	@idPersona int=-1,
 	@Codigo varchar(20), 
 	@Nombres varchar(40), 
 	@Apellido1 varchar(30),  
 	@Apellido2 varchar(30), 
 	@FechaNacimiento  DateTime,
-	@CampoNuevo  varchar(30), 
+	@CampoNuevo  varchar(30)='', 
 	@Usuario varchar (30)
 )
 AS
 begin
-
 	if (@idPersona<=0)
 	-- Insertar
 		begin
@@ -29,8 +28,9 @@ begin
 			Apellido2 = @apellido2,
 			FechaNacimiento = @fechanacimiento,
 			ModificadoPor = @Usuario,
+			-- observe que campo nuevo no esta incluido en la actualizacion
 			FechaModificado =getDate()
-		where idPersona = @IdPersona
+		where idPersona = @IdPersona 
 		select @idPersona
 		end
 end

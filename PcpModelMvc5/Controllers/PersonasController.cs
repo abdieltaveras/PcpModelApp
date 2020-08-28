@@ -1,5 +1,6 @@
 ﻿using BLLPcpModelApp;
 using BLLPcpModelApp.Models;
+using PcpModelMvc5.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,36 @@ using System.Web.Mvc;
 
 namespace PcpModelMvc5.Controllers
 {
-    public class PersonasController : Controller
+
+    public class BaseController : Controller {
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            filterContext.ExceptionHandled = true;
+
+            // Redirect on error:
+            filterContext.Result = RedirectToAction("Index", "Error");
+
+            // OR set the result without redirection:
+            filterContext.Result = new ViewResult
+            {
+                ViewName = "~/Views/Shared/Error.cshtml"
+            };
+        }
+    }
+
+    public class ErroresController : Controller {
+
+        public ActionResult ShowError()
+        {
+            return View("error");
+        }
+    }
+    public class PersonasController : BaseController
     {
         // GET: Personas
         public ActionResult Index()
         {
-            var personas = BLLPcpModelApp.BLLPcpModelApp.GetPersonas(new PersonaGetParams());
+            var personas = BLLPcpModel_App.GetPersonas(new PersonaGetParams());
             return View(personas);
         }
 
@@ -24,25 +49,49 @@ namespace PcpModelMvc5.Controllers
         }
 
         // GET: Personas/Create
-        public ActionResult Create()
+        public ActionResult CreateWithError(int id=-1)
         {
+            
             var persona = new Persona();
+            if (id>0)
+            {
+                
+            }    
             return View(persona);
+        }
+
+        public ActionResult CreateOrEdit(int id = -1)
+        {
+            var model = new PersonaVm();
+            if (id > 0)
+            {
+                var searchParam = new PersonaGetParams { IdPersona = id };
+                var persona = BLLPcpModel_App.GetPersonas(searchParam).FirstOrDefault();
+                if (persona != null)
+                {
+                    model.Persona = persona;
+                }
+            }
+            return View(model);
         }
 
         // POST: Personas/Create
         [HttpPost]
-        public ActionResult Create(Persona persona)
+        public ActionResult CreateOrEdit(Persona persona)
         {
+            var next = RedirectToAction("CreateOrEdit");
             try
             {
-                BLLPcpModelApp.BLLPcpModelApp.InsUpdPersona(persona);
+                BLLPcpModel_App.InsUpdPersona(persona);
             }
             catch (Exception e )
             {
-                return View(e.Message);
+                TempData["error"] = $"En el metodo CreateOrEdit al tratar de guardar a {persona}, en el controlador personas, el mensaje que reporta la aplicacion es {e.Message}";
+                TempData["retornarAlUrl"] = $"/Personas/CreateOrEdit/{persona.IdPersona}";
+                Response.StatusCode = 500;
+                next = RedirectToAction("ShowError","Errores");
             }
-            return RedirectToAction("Create");
+            return next;
         }
 
         // GET: Personas/Edit/5
