@@ -34,8 +34,12 @@ namespace BLLPcpModelApp.Tests
         [TestMethod()]
         public void GerPersonasTest()
         {
+
             var mensajeError = string.Empty;
-            var searchParam = new PersonaGetParams() {Nombres="Pedro" };
+            var searchParam = new PersonaGetParams()
+            {
+                Nombres ="Pedro"
+            };
             IEnumerable<Persona> result = null;
             try
             {

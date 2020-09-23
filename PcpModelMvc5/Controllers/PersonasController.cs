@@ -1,11 +1,15 @@
 ﻿using BLLPcpModelApp;
 using BLLPcpModelApp.Models;
+using Microsoft.Reporting.WebForms;
 using PcpModelMvc5.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace PcpModelMvc5.Controllers
 {
@@ -136,6 +140,31 @@ namespace PcpModelMvc5.Controllers
             {
                 return View();
             }
+        }
+
+        DbPcpModelAppDataSet ds = new DbPcpModelAppDataSet();
+        public ActionResult ReportPersonas()
+        {
+            ReportViewer reportViewer = new ReportViewer();
+            reportViewer.ProcessingMode = ProcessingMode.Local;
+            reportViewer.SizeToReportContent = true;
+            reportViewer.Width = Unit.Percentage(900);
+            reportViewer.Height = Unit.Percentage(900);
+
+            var connectionString = ConfigurationManager.ConnectionStrings["DbPcpModelAppConnectionString"].ConnectionString;
+
+
+            SqlConnection conx = new SqlConnection(connectionString); SqlDataAdapter adp = new SqlDataAdapter("SELECT * FROM TblPersonas", conx);
+
+            adp.Fill(ds, ds.TblPersonas.TableName);
+
+            reportViewer.LocalReport.ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reports\MyReport.rdlc";
+            reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MyDataSet", ds.Tables[0]));
+
+
+            ViewBag.ReportViewer = reportViewer;
+
+            return View();
         }
     }
 }
